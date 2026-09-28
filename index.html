@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retenção B2B | Cartão Combustível</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+	:root { --bg:#0b0c0e; --panel:#141619; --panel-2:#1d2024; --line:#30343a; --muted:#9299a1; --text:#f5f5f5; --accent:#ef3340; --accent-dark:#9e2029; --orange:#f58220; --success:#62d68a; --amber:#ffc857; }
+	* { box-sizing:border-box; }
+	body { margin:0; min-height:100vh; background:radial-gradient(circle at 85% -10%, #3a171b 0, transparent 34%), var(--bg); color:var(--text); font-family:Manrope, sans-serif; font-size:14px; }
+	button, input, select { font:inherit; }
+	button { cursor:pointer; }
+	.shell { width:min(1220px, calc(100% - 40px)); margin:0 auto; padding:28px 0 48px; }
+	.topbar { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:38px; }
+	.brand { display:flex; align-items:center; gap:12px; }
+	.brand-mark { width:34px; height:34px; display:grid; place-items:center; border:1px solid var(--accent); border-radius:9px; color:var(--accent); font-weight:800; }
+	.brand strong { display:block; font-size:14px; letter-spacing:.02em; }
+	.brand small { display:block; color:var(--muted); font-size:11px; margin-top:2px; }
+	.capacity { color:var(--muted); font-size:12px; border:1px solid var(--line); border-radius:7px; padding:9px 12px; }
+	.capacity b { color:var(--text); font-family:'DM Mono', monospace; font-weight:500; }
+	.intro { max-width:680px; margin-bottom:26px; }
+	.eyebrow { color:var(--accent); font-family:'DM Mono', monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; }
+	h1 { margin:10px 0 10px; font-size:clamp(28px, 4vw, 48px); line-height:1.08; letter-spacing:-.045em; }
+	.intro p { color:var(--muted); line-height:1.65; margin:0; }
+	.layout { display:grid; grid-template-columns:minmax(0, 1.08fr) minmax(340px, .92fr); gap:18px; align-items:start; }
+	.panel { background:rgba(18,22,25,.92); border:1px solid var(--line); border-radius:12px; padding:24px; }
+	.panel-heading { display:flex; justify-content:space-between; align-items:center; gap:15px; margin-bottom:22px; }
+	.panel h2 { font-size:16px; margin:0; letter-spacing:-.02em; }
+	.panel-heading span { color:var(--muted); font-size:11px; }
+	.section-label { color:var(--muted); font-family:'DM Mono', monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; margin:26px 0 13px; }
+	.section-label:first-of-type { margin-top:0; }
+	.fields { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+	.field.full { grid-column:1 / -1; }
+	label { display:block; color:#c5cfcc; font-size:12px; margin-bottom:7px; }
+	input, select { width:100%; color:var(--text); background:#0e1214; border:1px solid var(--line); border-radius:7px; padding:11px 12px; outline:0; transition:border-color .2s, box-shadow .2s; }
+	input::placeholder { color:#536067; }
+	input:focus, select:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(239,51,64,.14); }
+	select { appearance:none; background-image:linear-gradient(45deg, transparent 50%, #77858a 50%),linear-gradient(135deg,#77858a 50%,transparent 50%); background-position:calc(100% - 16px) 17px,calc(100% - 11px) 17px; background-size:5px 5px,5px 5px; background-repeat:no-repeat; }
+	.input-wrap { position:relative; }
+	.input-wrap input { padding-right:42px; }
+	.suffix { position:absolute; right:12px; top:11px; color:var(--muted); font-family:'DM Mono',monospace; font-size:12px; }
+	.hint { color:#68767c; font-size:10px; margin-top:5px; }
+	.check { display:flex; align-items:center; gap:9px; margin-top:9px; color:var(--muted); font-size:11px; }
+	.check input { width:14px; height:14px; accent-color:var(--accent); }
+	.actions { display:flex; gap:10px; margin-top:26px; }
+	.primary, .ghost { border-radius:7px; padding:12px 16px; font-weight:700; font-size:12px; }
+	.primary { flex:1; border:1px solid var(--accent); background:var(--accent); color:#fff; }
+	.primary:hover { background:#ff4c58; }
+	.ghost { border:1px solid var(--line); background:transparent; color:var(--muted); }
+	.ghost:hover { color:var(--text); border-color:#65747a; }
+	.result-panel { position:sticky; top:18px; min-height:490px; }
+	.result-empty { min-height:390px; display:grid; place-items:center; text-align:center; color:var(--muted); padding:28px; }
+	.result-empty .signal { width:48px; height:48px; display:grid; place-items:center; border:1px solid var(--line); border-radius:50%; color:var(--accent); font-size:22px; margin:0 auto 16px; }
+	.decision { border:1px solid var(--success); background:linear-gradient(135deg,rgba(98,214,138,.14),rgba(98,214,138,.03)); border-radius:9px; padding:18px; margin-bottom:21px; }
+	.decision.cancel { border-color:var(--accent); background:rgba(239,51,64,.08); }
+	.decision.watch { border-color:var(--amber); background:rgba(255,200,87,.08); }
+	.decision small { color:var(--muted); font-family:'DM Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.12em; }
+	.decision h3 { margin:7px 0 5px; font-size:24px; letter-spacing:-.04em; }
+	.decision p { color:#bdc8c4; line-height:1.5; margin:0; font-size:12px; }
+	.score-line { display:flex; justify-content:space-between; color:var(--muted); font-size:11px; margin-top:16px; }
+	.score-line b { color:var(--text); font-family:'DM Mono',monospace; }
+	.metrics { display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line); border-left:1px solid var(--line); }
+	.metric { padding:15px 14px; border-right:1px solid var(--line); border-bottom:1px solid var(--line); }
+	.metric span { display:block; color:var(--muted); font-size:10px; line-height:1.3; margin-bottom:7px; }
+	.metric strong { font-family:'DM Mono',monospace; font-size:16px; font-weight:500; }
+	.metric.highlight strong { color:var(--orange); }
+	.analysis-details { display:grid; gap:8px; margin-top:18px; }
+	.analysis-details h4 { margin:0; color:var(--text); font-size:12px; }
+	.analysis-details ul { list-style:none; padding:0; margin:0; display:grid; gap:6px; }
+	.analysis-details li { color:var(--muted); font-size:11px; line-height:1.45; padding-left:18px; position:relative; }
+	.analysis-details li::before { content:'+'; color:var(--success); position:absolute; left:0; font-weight:800; }
+	.analysis-details li.negative::before { content:'-'; color:var(--accent); }
+	.reason { color:var(--muted); font-size:11px; line-height:1.5; margin-top:18px; }
+	.history { margin-top:18px; }
+	.history-list { display:grid; gap:8px; }
+	.history-item { display:flex; align-items:center; justify-content:space-between; gap:18px; border-bottom:1px solid var(--line); padding:13px 0; }
+	.history-item:last-child { border-bottom:0; padding-bottom:0; }
+	.history-main strong { display:block; font-size:12px; }
+	.history-main small { display:block; color:var(--muted); font-size:10px; margin-top:4px; }
+	.history-result { text-align:right; white-space:nowrap; }
+	.history-result b { display:block; font-size:11px; }
+	.history-result b.retain { color:var(--success); }
+	.history-result b.watch { color:var(--amber); }
+	.history-result b.cancel { color:var(--accent); }
+	.history-result small { color:var(--muted); font-size:10px; }
+	.empty-history { color:var(--muted); font-size:12px; padding:8px 0 0; }
+	.toast { position:fixed; right:20px; bottom:20px; background:#eafbd8; color:#192510; padding:12px 15px; border-radius:7px; font-size:12px; font-weight:700; opacity:0; transform:translateY(10px); pointer-events:none; transition:.25s; }
+	.toast.show { opacity:1; transform:translateY(0); }
+	@media (max-width:800px) { .shell{width:min(100% - 28px,620px);padding-top:20px}.topbar{margin-bottom:28px}.layout{grid-template-columns:1fr}.result-panel{position:static}.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.capacity{display:none} }
+</style>
+</head>
+<body>
+<main class="shell">
+	<header class="topbar">
+		<div class="brand"><div class="brand-mark">R</div><div><strong>Retenção B2B</strong><small>Cartão Combustível</small></div></div>
+		<div class="capacity"><b id="historyCount">0</b> / 10 atendimentos salvos</div>
+	</header>
+	<section class="intro"><div class="eyebrow">Decisão orientada por dados</div><h1>Reter ou encerrar?</h1><p>Combine o motivo do cancelamento com o valor econômico da conta para definir a próxima ação comercial.</p></section>
+	<div class="layout">
+		<form class="panel" id="retentionForm">
+			<div class="panel-heading"><h2>Dados do atendimento</h2><span>Campos com * são obrigatórios</span></div>
+			<div class="section-label">Identificação</div>
+			<div class="fields">
+				<div class="field full"><label for="cnpj">CNPJ *</label><input id="cnpj" inputmode="numeric" maxlength="18" placeholder="00.000.000/0000-00" required><div class="hint" id="companyHint">Digite o CNPJ para reconhecer a empresa.</div></div>
+				<div class="field full"><label for="companyName">Empresa <span style="color:#68767c">(preenchida automaticamente)</span></label><input id="companyName" placeholder="Nome da empresa" autocomplete="organization"></div>
+				<div class="field full"><label for="reason">Motivo do cancelamento *</label><select id="reason" required><option value="">Selecione o principal motivo</option><option value="price">Preço / condições comerciais</option><option value="low_usage">Baixo uso do cartão</option><option value="competitor">Migração para concorrente</option><option value="service">Insatisfação com atendimento</option><option value="fleet">Redução ou venda da frota</option><option value="cashflow">Corte temporário de custos</option><option value="fuel_price">Preço do combustível</option><option value="credit">Limite ou análise de crédito</option><option value="coverage">Cobertura / aceitação insuficiente</option><option value="technology">Problema técnico ou instabilidade</option><option value="billing">Problema de cobrança ou faturamento</option><option value="contract">Fim ou alteração de contrato</option><option value="management">Troca de gestão ou responsável</option><option value="closed">Empresa encerrou as atividades</option><option value="other">Outro motivo</option></select></div>
+			</div>
+			<div class="section-label">Economia da conta</div>
+			<div class="fields">
+				<div class="field"><label for="contractedVolume">Volume contratado / limite *</label><div class="input-wrap"><input id="contractedVolume" class="currency" inputmode="decimal" placeholder="0,00" required><span class="suffix">R$</span></div></div>
+				<div class="field"><label for="monthlySpend">Média gasta por mês *</label><div class="input-wrap"><input id="monthlySpend" class="currency" inputmode="decimal" placeholder="0,00" required><span class="suffix">R$</span></div></div>
+				<div class="field"><label for="mdr">MDR *</label><div class="input-wrap"><input id="mdr" class="number" inputmode="decimal" placeholder="0,00" required><span class="suffix">%</span></div></div>
+				<div class="field"><label for="vehicles">Veículos com Sem Parar <span style="color:#68767c">(opcional)</span></label><div class="input-wrap"><input id="vehicles" type="number" min="0" step="1" placeholder="Não informado"><span class="suffix">un.</span></div></div>
+				<div class="field full"><label>Abastecimento nos últimos 3 meses</label><div class="fields"><div class="input-wrap"><input id="month1" class="integer-currency" inputmode="numeric" placeholder="Mês 1"><span class="suffix">R$</span></div><div class="input-wrap"><input id="month2" class="integer-currency" inputmode="numeric" placeholder="Mês 2"><span class="suffix">R$</span></div><div class="input-wrap"><input id="month3" class="integer-currency" inputmode="numeric" placeholder="Mês 3"><span class="suffix">R$</span></div></div><label class="check"><input id="noLast3m" type="checkbox"> Não possui histórico dos últimos 3 meses</label><div class="hint">Total dos últimos 3M: <strong id="historyTotal">R$ 0,00</strong></div></div>
+			</div>
+			<div class="actions"><button class="primary" type="submit">Analisar cliente</button><button class="ghost" type="button" id="clearButton">Limpar</button></div>
+		</form>
+		<section class="panel result-panel" id="resultPanel"><div class="panel-heading"><h2>Análise recomendada</h2><span id="analysisDate">Aguardando dados</span></div><div id="resultContent"><div class="result-empty"><div><div class="signal">↗</div><strong>O resultado aparecerá aqui</strong><p>Preencha os dados para calcular a receita e a recomendação.</p></div></div></div></section>
+	</div>
+	<section class="panel history"><div class="panel-heading"><h2>Atendimentos recentes</h2><button class="ghost" type="button" id="clearHistory">Limpar histórico</button></div><div id="historyList" class="history-list"></div></section>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+	const STORAGE_KEY = 'retencao-b2b-atendimentos';
+	const $ = (id) => document.getElementById(id);
+	const money = (value) => new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' }).format(value || 0);
+	const parseNumber = (value) => Number(String(value).replace(/\./g, '').replace(',', '.')) || 0;
+	const formatCurrencyInput = (input) => { const digits = input.value.replace(/\D/g, ''); if (!digits) { input.value = ''; return; } input.value = new Intl.NumberFormat('pt-BR', { minimumFractionDigits:2, maximumFractionDigits:2 }).format(Number(digits) / 100); };
+	const formatIntegerCurrencyInput = (input) => { const digits = input.value.replace(/\D/g, ''); input.value = digits ? new Intl.NumberFormat('pt-BR').format(Number(digits)) : ''; };
+	const formatCnpj = (value) => value.replace(/\D/g, '').slice(0,14).replace(/(\d{2})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1/$2').replace(/(\d{4})(\d{1,2})$/,'$1-$2');
+	let currentAnalysis = null;
+
+	$('cnpj').addEventListener('input', (event) => { event.target.value = formatCnpj(event.target.value); if (event.target.value.replace(/\D/g,'').length === 14) lookupCompany(event.target.value); });
+	$('noLast3m').addEventListener('change', (event) => { ['month1','month2','month3'].forEach((id) => { $(id).disabled = event.target.checked; if (event.target.checked) $(id).value = ''; }); updateHistoryTotal(); });
+	document.querySelectorAll('.currency').forEach((input) => input.addEventListener('input', () => { formatCurrencyInput(input); updateHistoryTotal(); }));
+	document.querySelectorAll('.integer-currency').forEach((input) => input.addEventListener('input', () => { formatIntegerCurrencyInput(input); updateHistoryTotal(); }));
+
+	function getLast3mTotal() { return ['month1','month2','month3'].reduce((total, id) => total + parseNumber($(id).value), 0); }
+	function updateHistoryTotal() { $('historyTotal').textContent = money(getLast3mTotal()); }
+
+	async function lookupCompany(cnpj) {
+		$('companyHint').textContent = 'Consultando dados públicos da empresa...';
+		try {
+			const response = await fetch('https://brasilapi.com.br/api/cnpj/v1/' + cnpj.replace(/\D/g,''));
+			if (!response.ok) throw new Error('CNPJ não encontrado');
+			const data = await response.json();
+			$('companyName').value = data.razao_social || data.nome_fantasia || '';
+			$('companyHint').textContent = 'Empresa reconhecida pela base pública.';
+		} catch (error) { $('companyHint').textContent = 'Não foi possível consultar agora. Informe o nome manualmente.'; }
+	}
+
+	function calculate(data) {
+		const annualValue = data.monthlySpend * 12;
+		const monthlyRevenue = (data.mdr / 100) * data.monthlySpend;
+		const annualRevenue = monthlyRevenue * 12;
+		const usageRatio = data.contractedVolume ? data.monthlySpend / data.contractedVolume : 0;
+		const historyRatio = data.last3m ? data.last3m / (data.monthlySpend * 3 || 1) : 0;
+		let score = 0;
+		if (annualRevenue >= 12000) score += 35; else if (annualRevenue >= 6000) score += 22; else if (annualRevenue >= 2400) score += 12;
+		if (usageRatio >= .7) score += 20; else if (usageRatio >= .35) score += 12;
+		if (data.vehicles >= 5) score += 15; else if (data.vehicles >= 1) score += 8;
+		if (historyRatio >= .8) score += 10;
+		if (['price','low_usage','competitor','cashflow','fuel_price','credit','coverage','technology','billing','contract','management'].includes(data.reason)) score += 15;
+		if (['closed','fleet'].includes(data.reason)) score -= 40;
+		if (data.noLast3m) score -= 3;
+		score = Math.max(0, Math.min(100, score));
+		const retain = score >= 50 && data.reason !== 'closed';
+		const watch = !retain && score >= 35 && data.reason !== 'closed';
+		const positives = []; const negatives = [];
+		if (annualRevenue >= 12000) positives.push('A conta gera receita anual relevante para a carteira.'); else if (annualRevenue < 2400) negatives.push('A receita anual estimada é baixa.');
+		if (usageRatio >= .7) positives.push('O cliente utiliza uma parcela alta do limite contratado.'); else if (usageRatio < .35) negatives.push('A utilização está abaixo de 35% do limite contratado.');
+		if (historyRatio >= .8) positives.push('Os últimos 3 meses confirmam consistência de abastecimento.');
+		if (data.vehicles > 0) positives.push(`${data.vehicles} veículo(s) com Sem Parar ampliam o potencial de relacionamento.`);
+		if (['closed','fleet'].includes(data.reason)) negatives.push('O motivo indica redução estrutural ou encerramento da operação.'); else positives.push('O motivo ainda pode ser trabalhado com uma ação comercial específica.');
+		if (data.noLast3m) negatives.push('Sem histórico de 3 meses, a decisão tem menor evidência de comportamento.');
+		return { ...data, annualValue, monthlyRevenue, annualRevenue, score, positives, negatives, decision: retain ? 'Tentar reter' : watch ? 'Avaliar com cautela' : 'Apenas cancelar' };
+	}
+
+	function renderResult(analysis) {
+		currentAnalysis = analysis;
+		const decisionClass = analysis.decision === 'Apenas cancelar' ? 'cancel' : analysis.decision === 'Avaliar com cautela' ? 'watch' : '';
+		const reasonText = { price:'há espaço para renegociação de condições.', low_usage:'vale investigar a baixa utilização antes de perder a conta.', competitor:'uma proposta de valor pode reverter a migração.', service:'a recuperação depende de um plano de atendimento.', fleet:'a redução da frota limita o potencial econômico.', cashflow:'uma pausa ou condição temporária pode preservar a relação.', fuel_price:'uma condição comercial pode compensar o impacto do combustível.', credit:'vale revisar limite e condições de crédito.', coverage:'é importante verificar a rede utilizada pelo cliente.', technology:'o primeiro passo é corrigir a experiência técnica.', billing:'a correção do faturamento pode recuperar a confiança.', contract:'uma revisão contratual pode abrir espaço para retenção.', management:'a nova gestão precisa ser reengajada.', closed:'o encerramento reduz a viabilidade de retenção.', other:'o motivo precisa ser qualificado na conversa.' }[analysis.reason];
+		const positiveItems = analysis.positives.map((item) => `<li>${item}</li>`).join('');
+		const negativeItems = analysis.negatives.map((item) => `<li class="negative">${item}</li>`).join('');
+		$('analysisDate').textContent = new Date().toLocaleDateString('pt-BR');
+		$('resultContent').innerHTML = `<div class="decision ${decisionClass}"><small>Recomendação</small><h3>${analysis.decision}</h3><p>Score de retenção: <b>${analysis.score}/100</b>. ${reasonText}</p><div class="score-line"><span>Baixa prioridade</span><b>${analysis.score}%</b><span>Alta prioridade</span></div></div><div class="metrics"><div class="metric"><span>Volume contratado / limite</span><strong>${money(analysis.contractedVolume)}</strong></div><div class="metric"><span>Valor anual</span><strong>${money(analysis.annualValue)}</strong></div><div class="metric"><span>Receita Sem Parar / mês</span><strong>${money(analysis.monthlyRevenue)}</strong></div><div class="metric highlight"><span>Receita Sem Parar / ano</span><strong>${money(analysis.annualRevenue)}</strong></div></div><div class="analysis-details"><h4>Por que essa recomendação?</h4><ul>${positiveItems}${negativeItems}</ul></div><p class="reason">${analysis.noLast3m ? 'Sem histórico de abastecimento nos últimos 3 meses: a decisão usa os demais indicadores.' : `Total dos últimos 3M considerado: ${money(analysis.last3m)}.`}</p>`;
+	}
+
+	$('retentionForm').addEventListener('submit', (event) => { event.preventDefault(); const data = { cnpj:$('cnpj').value, company:$('companyName').value.trim() || 'Empresa não informada', reason:$('reason').value, contractedVolume:parseNumber($('contractedVolume').value), monthlySpend:parseNumber($('monthlySpend').value), mdr:parseNumber($('mdr').value), last3m:getLast3mTotal(), noLast3m:$('noLast3m').checked, vehicles:Number($('vehicles').value) || 0 }; const analysis = calculate(data); renderResult(analysis); saveRecord(analysis); showToast('Atendimento analisado e salvo.'); });
+	$('clearButton').addEventListener('click', () => { $('retentionForm').reset(); ['month1','month2','month3'].forEach((id) => $(id).disabled = false); $('companyHint').textContent = 'Digite o CNPJ para reconhecer a empresa.'; updateHistoryTotal(); });
+
+	function getRecords() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch (error) { return []; } }
+	function saveRecord(record) { const records = [{ ...record, savedAt:Date.now() }, ...getRecords().filter((item) => item.cnpj !== record.cnpj)].slice(0, 10); localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); renderHistory(); }
+	function renderHistory() { const records = getRecords(); $('historyCount').textContent = records.length; $('historyList').innerHTML = records.length ? records.map((item) => { const statusClass = item.decision === 'Tentar reter' ? 'retain' : item.decision === 'Avaliar com cautela' ? 'watch' : 'cancel'; return `<div class="history-item"><div class="history-main"><strong>${item.company}</strong><small>${item.cnpj} · ${new Date(item.savedAt || Date.now()).toLocaleDateString('pt-BR')}</small></div><div class="history-result"><b class="${statusClass}">${item.decision}</b><small>${money(item.annualRevenue)}/ano</small></div></div>`; }).join('') : '<div class="empty-history">Nenhum atendimento salvo ainda.</div>'; }
+	$('clearHistory').addEventListener('click', () => { if (getRecords().length && confirm('Remover todos os atendimentos salvos?')) { localStorage.removeItem(STORAGE_KEY); renderHistory(); showToast('Histórico removido.'); } });
+	function showToast(message) { $('toast').textContent = message; $('toast').classList.add('show'); setTimeout(() => $('toast').classList.remove('show'), 2400); }
+	renderHistory();
+</script>
+</body>
+</html>
